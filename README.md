@@ -1,10 +1,10 @@
-# Finance Tracker
+# FinSight
 
 A responsive Angular dashboard for tracking income and expenses, reviewing category breakdowns, and keeping an overview of the current balance.
 
 This is my first Angular project, built to extend my experience as a Java/Spring developer into frontend development. The focus is on typed forms, reactive state, clear component responsibilities, and a usable interface.
 
-![Finance Tracker dashboard with income and expense summaries, current balance, and transaction history](docs/images/dashboard.png)
+![FinSight dashboard with income and expense summaries, current balance, and transaction history](docs/images/dashboard.png)
 
 > The app starts with fictional example transactions. Data is kept in browser memory: refreshing the page resets it to the initial dataset. See [Start with an empty tracker](#start-with-an-empty-tracker) to remove the examples.
 
@@ -17,6 +17,20 @@ This is my first Angular project, built to extend my experience as a Java/Spring
 - **Add and delete transactions:** a reactive form with required category/date fields and a minimum amount of €0.01.
 - **Responsive layout:** a three-column desktop dashboard that adapts to tablet and mobile screens.
 - **Local icons:** category-specific SVG icons, visible form labels, keyboard focus styles, and descriptive delete-button labels.
+
+## Screenshots
+
+### Filter transactions
+
+Combine transaction type and category filters to narrow down the history. Here, the list shows salary income while the dashboard totals still cover all transactions.
+
+![Transaction history filtered by Income and Salary, alongside the income and expense summaries](docs/images/filter.png)
+
+### Add a transaction
+
+Choose a type, category, amount, and date to add income or an expense. The form shows validation feedback when an amount is below the minimum of €0.01.
+
+![Add transaction form with Expense and Groceries selected and a validation message for an amount below €0.01](docs/images/add%20transaction.png)
 
 
 ## Run locally
