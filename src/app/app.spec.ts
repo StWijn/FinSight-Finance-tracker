@@ -1,5 +1,9 @@
 import { TestBed } from '@angular/core/testing';
 import { App } from './app';
+import { registerLocaleData } from '@angular/common';
+import localeNl from '@angular/common/locales/nl';
+
+registerLocaleData(localeNl);
 
 describe('App', () => {
   beforeEach(async () => {
@@ -18,6 +22,8 @@ describe('App', () => {
     const fixture = TestBed.createComponent(App);
     await fixture.whenStable();
     const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('h1')?.textContent).toContain('Hello, expense-income-tracker');
+    expect(compiled.querySelector('h1')?.textContent?.replace(/\s+/g, ' ').trim()).toBe(
+      'Finance Tracker',
+    );
   });
 });

@@ -1,0 +1,136 @@
+<div class="transaction-toolbar">
+  <button
+    type="button"
+    class="toolbar-button filter-button"
+    [disabled]="isAddingTransaction()"
+    [attr.aria-expanded]="areFiltersVisible() && !isAddingTransaction()"
+    aria-controls="transaction-filters"
+    (click)="toggleFilters()"
+  >
+    <app-icon name="list-filter" />
+    <span>Filter by category</span>
+    <app-icon name="chevron-down" class="filter-chevron" [class.expanded]="areFiltersVisible()" />
+  </button>
+  <button
+    type="button"
+    class="toolbar-button add-button"
+    [attr.aria-expanded]="isAddingTransaction()"
+    aria-controls="transaction-content"
+    (click)="toggleTransactionForm()"
+  >
+    <app-icon [name]="isAddingTransaction() ? 'arrow-left' : 'plus'" />
+    {{ isAddingTransaction() ? 'Back to transactions' : 'Add transaction' }}
+  </button>
+</div>
+
+<div id="transaction-filters">
+  @if (areFiltersVisible() && !isAddingTransaction()) {
+    <form [formGroup]="filterForm" class="filter-form">
+      <label>
+        <span>Transaction type</span>
+        <select formControlName="type" (change)="onTypeChange()">
+          <option value="">All types</option>
+          <option value="income">Income</option>
+          <option value="expense">Expense</option>
+        </select>
+      </label>
+      <label>
+        <span>Category</span>
+        <select formControlName="category">
+          <option value="">All categories</option>
+          @for (
+            category of filterForm.controls.type.value === 'income'
+              ? transactionService.incomeCategories
+              : filterForm.controls.type.value === 'expense'
+                ? transactionService.expenseCategories
+                : transactionService.allCategories;
+            track category
+          ) {
+            <option [value]="category">{{ category }}</option>
+          }
+        </select>
+      </label>
+    </form>
+  }
+</div>
+
+<div id="transaction-content">
+  @if (isAddingTransaction()) {
+    <section class="transaction-form-panel">
+      <h2>Add transaction</h2>
+      <p>Keep your overview up to date with a new income or expense.</p>
+      <app-transactionform (transactionAdded)="isAddingTransaction.set(false)" />
+    </section>
+  } @else {
+    <table class="transaction-table">
+      <caption class="sr-only">
+        Transaction history, newest first
+      </caption>
+      <colgroup>
+        <col class="amount-column" />
+        <col class="category-column" />
+        <col class="date-column" />
+        <col class="action-column" />
+      </colgroup>
+      <thead>
+        <tr>
+          <th scope="col">Amount</th>
+          <th scope="col">Category</th>
+          <th scope="col" class="transaction-date">Date</th>
+          <th scope="col"><span class="sr-only">Actions</span></th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (transaction of filteredTransactions(); track transaction.id) {
+          <tr>
+            <td
+              class="transaction-amount"
+              [class.income]="transaction.type === 'income'"
+              [class.expense]="transaction.type === 'expense'"
+            >
+              <span>{{ transaction.type === 'income' ? '+' : '−' }}</span>
+              {{ transaction.amount | currency: 'EUR' : 'symbol' }}
+            </td>
+            <td>
+              <div class="transaction-category">
+                <span
+                  class="category-icon"
+                  [attr.data-tone]="categoryAppearance(transaction.category).tone"
+                >
+                  <app-icon [name]="categoryAppearance(transaction.category).icon" />
+                </span>
+                <span class="category-copy">
+                  {{ transaction.category }}
+                  <time class="mobile-date" [attr.datetime]="transaction.date">{{
+                    transaction.date | date: 'yyyy-MM-dd'
+                  }}</time>
+                </span>
+              </div>
+            </td>
+            <td class="transaction-date">
+              <time [attr.datetime]="transaction.date">{{
+                transaction.date | date: 'yyyy-MM-dd'
+              }}</time>
+            </td>
+            <td class="transaction-action">
+              <button
+                type="button"
+                class="delete-button"
+                [attr.aria-label]="
+                  'Delete ' + transaction.category + ' transaction on ' + transaction.date
+                "
+                (click)="transactionService.deleteTransaction(transaction.id)"
+              >
+                <app-icon name="trash-2" />
+              </button>
+            </td>
+          </tr>
+        } @empty {
+          <tr>
+            <td colspan="4" class="empty-state">No transactions match your filters.</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  }
+</div>

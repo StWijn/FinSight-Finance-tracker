@@ -1,0 +1,54 @@
+<div
+  class="summary-content"
+  [class.income]="typeOfSummaryCard() === 'income'"
+  [class.expense]="typeOfSummaryCard() === 'expense'"
+>
+  <header class="summary-header">
+    <span class="summary-icon" aria-hidden="true">
+      <app-icon [name]="typeOfSummaryCard() === 'income' ? 'trending-up' : 'trending-down'" />
+    </span>
+    <div class="summary-heading">
+      <h2>Total {{ typeOfSummaryCard() === 'income' ? 'Income' : 'Expenses' }}</h2>
+      <p class="summary-total">{{ total() | currency: 'EUR' : 'symbol' : '1.2-2' : 'nl-NL' }}</p>
+    </div>
+  </header>
+
+  @if (categoryBreakdown()[0]; as largestCategory) {
+    <div class="largest-category">
+      <span class="category-icon" aria-hidden="true">
+        <app-icon [name]="categoryAppearance(largestCategory.category).icon" />
+      </span>
+      <div>
+        <p class="largest-category-label">Largest category: {{ largestCategory.category }}</p>
+        <p class="largest-category-amount">
+          {{ largestCategory.amount | currency: 'EUR' : 'symbol' : '1.2-2' : 'nl-NL' }}
+        </p>
+      </div>
+    </div>
+
+    <ul class="category-list" aria-label="Category breakdown">
+      @for (category of categoryBreakdown(); track category.category) {
+        <li>
+          <div class="category-label">
+            <span>{{ category.category }}</span>
+            <span class="category-percentage">{{ category.percentage | number: '1.0-1' }}%</span>
+          </div>
+          <div
+            class="progress-track"
+            role="progressbar"
+            [attr.aria-label]="category.category"
+            aria-valuemin="0"
+            aria-valuemax="100"
+            [attr.aria-valuenow]="category.percentage"
+          >
+            <div class="progress-fill" [style.width.%]="category.percentage"></div>
+          </div>
+        </li>
+      }
+    </ul>
+  } @else {
+    <p class="empty-summary">
+      No {{ typeOfSummaryCard() === 'income' ? 'income' : 'expense' }} transactions yet.
+    </p>
+  }
+</div>

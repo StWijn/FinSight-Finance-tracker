@@ -1,0 +1,33 @@
+<div class="dashboard">
+  <div class="dashboard-layout">
+    <section class="summary-panel income-panel" aria-label="Income summary">
+      <app-summarycard
+        [typeOfSummaryCard]="'income'"
+        [transactions]="transactionService.incomeTransactions()"
+        [total]="transactionService.income()"
+      />
+    </section>
+
+    <main class="activity-panel">
+      <header class="dashboard-hero">
+        <div class="brand-mark" aria-hidden="true">
+          <span><app-icon name="wallet" /></span>
+        </div>
+        <h1>Finance <span>Tracker</span></h1>
+        <p class="hero-subtitle">
+          Track your income, expenses and build a better financial future.
+        </p>
+        <app-balance [balance]="transactionService.balance()" />
+      </header>
+      <app-transactionlist />
+    </main>
+
+    <section class="summary-panel expense-panel" aria-label="Expense summary">
+      <app-summarycard
+        [typeOfSummaryCard]="'expense'"
+        [transactions]="transactionService.expenseTransactions()"
+        [total]="transactionService.expenses()"
+      />
+    </section>
+  </div>
+</div>

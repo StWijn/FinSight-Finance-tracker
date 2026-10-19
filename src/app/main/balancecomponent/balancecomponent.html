@@ -1,0 +1,7 @@
+<div class="balance-card" [class.negative]="balance() < 0">
+  <div class="balance-icon"><app-icon name="coins" /></div>
+  <div class="balance-copy">
+    <p class="balance-label">Current balance</p>
+    <p class="balance-amount">{{ balance() | currency: 'EUR' : 'symbol' : '1.2-2' : 'nl-NL' }}</p>
+  </div>
+</div>

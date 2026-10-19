@@ -1,0 +1,114 @@
+<form
+  class="transaction-form"
+  [formGroup]="createTransactionFormGroup"
+  (ngSubmit)="addTransaction()"
+>
+  <p class="form-description">Add income or an expense to keep your balance up to date.</p>
+
+  <div class="form-fields">
+    <div class="form-field">
+      <label for="transaction-type">Type</label>
+      <select id="transaction-type" formControlName="type" (change)="onTypeChange()">
+        <option value="income">Income</option>
+        <option value="expense">Expense</option>
+      </select>
+    </div>
+
+    <div class="form-field">
+      <label for="transaction-category">Category</label>
+      <select
+        id="transaction-category"
+        formControlName="category"
+        [attr.aria-invalid]="
+          createTransactionFormGroup.controls.category.touched &&
+          createTransactionFormGroup.controls.category.invalid
+        "
+        [attr.aria-describedby]="
+          createTransactionFormGroup.controls.category.touched &&
+          createTransactionFormGroup.controls.category.invalid
+            ? 'category-error'
+            : null
+        "
+      >
+        <option value="" disabled>Select category</option>
+        @for (
+          category of isIncome
+            ? transactionService.incomeCategories
+            : transactionService.expenseCategories;
+          track category
+        ) {
+          <option [value]="category">{{ category }}</option>
+        }
+      </select>
+      @if (
+        createTransactionFormGroup.controls.category.touched &&
+        createTransactionFormGroup.controls.category.invalid
+      ) {
+        <p id="category-error" class="field-error">Choose a category.</p>
+      }
+    </div>
+
+    <div class="form-field">
+      <label for="transaction-amount">Amount</label>
+      <div class="amount-input">
+        <span aria-hidden="true">&euro;</span>
+        <input
+          id="transaction-amount"
+          type="number"
+          min="0.01"
+          step="0.01"
+          inputmode="decimal"
+          formControlName="amount"
+          [attr.aria-invalid]="
+            createTransactionFormGroup.controls.amount.touched &&
+            createTransactionFormGroup.controls.amount.invalid
+          "
+          [attr.aria-describedby]="
+            createTransactionFormGroup.controls.amount.touched &&
+            createTransactionFormGroup.controls.amount.invalid
+              ? 'amount-error'
+              : null
+          "
+        />
+      </div>
+      @if (
+        createTransactionFormGroup.controls.amount.touched &&
+        createTransactionFormGroup.controls.amount.invalid
+      ) {
+        <p id="amount-error" class="field-error">Enter an amount of at least &euro;0.01.</p>
+      }
+    </div>
+
+    <div class="form-field">
+      <label for="transaction-date">Date</label>
+      <input
+        id="transaction-date"
+        type="date"
+        formControlName="date"
+        [attr.aria-invalid]="
+          createTransactionFormGroup.controls.date.touched &&
+          createTransactionFormGroup.controls.date.invalid
+        "
+        [attr.aria-describedby]="
+          createTransactionFormGroup.controls.date.touched &&
+          createTransactionFormGroup.controls.date.invalid
+            ? 'date-error'
+            : null
+        "
+      />
+      @if (
+        createTransactionFormGroup.controls.date.touched &&
+        createTransactionFormGroup.controls.date.invalid
+      ) {
+        <p id="date-error" class="field-error">Choose a date.</p>
+      }
+    </div>
+  </div>
+
+  <div class="form-actions">
+    <button type="submit">
+      <app-icon name="plus" />
+      Add transaction
+    </button>
+  </div>
+</form>

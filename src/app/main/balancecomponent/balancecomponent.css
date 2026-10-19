@@ -1,0 +1,103 @@
+:host {
+  display: block;
+}
+.balance-card {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 24px;
+  max-width: 560px;
+  margin: 0 auto;
+  padding: 21px 24px;
+  border: 1px solid #d9f6e9;
+  border-radius: 22px;
+  background: rgb(255 255 255 / 95%);
+  box-shadow: 0 8px 22px rgb(0 113 71 / 8%);
+}
+.balance-card::before,
+.balance-card::after {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  bottom: -50px;
+  width: 240px;
+  height: 90px;
+  border-radius: 50%;
+  background: #e6fcf1;
+  transform: rotate(25deg);
+}
+.balance-card::before {
+  left: -100px;
+}
+.balance-card::after {
+  right: -100px;
+  transform: rotate(-25deg);
+}
+.balance-icon {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 62px;
+  height: 62px;
+  border-radius: 50%;
+  color: #009c60;
+  background: #dffbed;
+}
+.balance-icon app-icon {
+  width: 30px;
+  height: 30px;
+}
+.balance-copy {
+  padding-left: 24px;
+  border-left: 1px solid #e0e7ef;
+  text-align: left;
+}
+.balance-label {
+  margin: 0 0 3px;
+  font-size: 16px;
+  color: #61718a;
+}
+.balance-amount {
+  margin: 0;
+  font-size: clamp(28px, 2.6vw, 36px);
+  font-weight: 750;
+  color: #009c60;
+  letter-spacing: -0.7px;
+  line-height: 1.25;
+  font-variant-numeric: tabular-nums;
+}
+.negative .balance-amount,
+.negative .balance-icon {
+  color: #e71f4c;
+}
+.negative .balance-icon,
+.negative::before,
+.negative::after {
+  background: #fff0f3;
+}
+@media (max-width: 619px) {
+  .balance-card {
+    gap: 14px;
+    padding: 18px 14px;
+  }
+  .balance-icon {
+    width: 46px;
+    height: 46px;
+  }
+  .balance-icon app-icon {
+    width: 25px;
+    height: 25px;
+  }
+  .balance-copy {
+    padding-left: 14px;
+  }
+  .balance-label {
+    font-size: 13px;
+  }
+  .balance-amount {
+    font-size: clamp(23px, 7vw, 30px);
+  }
+}
